@@ -1,6 +1,39 @@
 package lvlerr
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
+
+func Wrap(err error, level string) error {
+	return &lvlError{
+		err:   err,
+		level: level,
+	}
+}
+
+func WithMessage(err error, level, msg string) error {
+	return &lvlError{
+		err:   errors.Wrap(err, msg),
+		level: level,
+	}
+}
+
+func Level(err error) string {
+	for err != nil {
+		level, ok := err.(leveler)
+		if ok {
+			return level.Level()
+		}
+		cause, ok := err.(causer)
+		if !ok {
+			break
+		}
+		err = cause.Cause()
+	}
+	return ""
+}
 
 type causer interface {
 	Cause() error
