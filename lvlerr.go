@@ -21,10 +21,13 @@ func Wrap(err error, level string) error {
 }
 
 func WithMessage(err error, level, msg string) error {
-	return &lvlError{
-		err:   errors.Wrap(err, msg),
-		level: level,
-	}
+	return errors.Wrap(
+		&lvlError{
+			err:   errors.Wrap(err, msg),
+			level: level,
+		},
+		msg,
+	)
 }
 
 func Level(err error) string {
