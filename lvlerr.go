@@ -6,6 +6,13 @@ import (
 	"github.com/pkg/errors"
 )
 
+func New(msg, level string) error {
+	return &lvlError{
+		err:   errors.New(msg),
+		level: level,
+	}
+}
+
 func Wrap(err error, level string) error {
 	return &lvlError{
 		err:   err,
