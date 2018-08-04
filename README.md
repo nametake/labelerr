@@ -1,4 +1,4 @@
-# lvlerr
+# labelerr
 
-[![CircleCI](https://circleci.com/gh/nametake/lvlerr.svg?style=svg)](https://circleci.com/gh/nametake/lvlerr)
-[![GoDoc](https://godoc.org/github.com/nametake/lvlerr?status.svg)](https://godoc.org/github.com/nametake/lvlerr)
+[![CircleCI](https://circleci.com/gh/nametake/labelerr.svg?style=svg)](https://circleci.com/gh/nametake/labelerr)
+[![GoDoc](https://godoc.org/github.com/nametake/labelerr?status.svg)](https://godoc.org/github.com/nametake/labelerr)
