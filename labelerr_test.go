@@ -127,3 +127,9 @@ func TestWithMessage(t *testing.T) {
 		})
 	}
 }
+
+func TestWithMessageNil(t *testing.T) {
+	if got := WithMessage(nil, "no error", "no msg"); got != nil {
+		t.Errorf("WithMessage(nil, \"no error\", \"no msg\"): got: %v, want nil", got)
+	}
+}

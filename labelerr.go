@@ -24,6 +24,9 @@ func Wrap(err error, label string) error {
 }
 
 func WithMessage(err error, label, msg string) error {
+	if err == nil {
+		return nil
+	}
 	return errors.Wrap(
 		&labelError{
 			err:   err,
