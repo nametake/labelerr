@@ -133,3 +133,69 @@ func TestWithMessageNil(t *testing.T) {
 		t.Errorf("WithMessage(nil, \"no error\", \"no msg\"): got: %v, want nil", got)
 	}
 }
+
+func TestLabel(t *testing.T) {
+	tests := []struct {
+		name string
+		err  error
+		want string
+	}{
+		{
+			name: "New()",
+			err:  New("message", "label"),
+			want: "label",
+		},
+		{
+			name: "Wrap()",
+			err:  Wrap(errors.New("error"), "label"),
+			want: "label",
+		},
+		{
+			name: "WithMessage()",
+			err:  WithMessage(errors.New("error"), "label", "message"),
+			want: "label",
+		},
+		{
+			name: "no label error",
+			err:  errors.New("error"),
+			want: "",
+		},
+		{
+			name: "nil",
+			err:  nil,
+			want: "",
+		},
+		{
+			name: "use errors.Wrap New()",
+			err:  errors.Wrap(New("message", "label"), "wrapped"),
+			want: "label",
+		},
+		{
+			name: "use errors.Wrap Wrap()",
+			err:  errors.Wrap(Wrap(errors.New("error"), "label"), "wrapped"),
+			want: "label",
+		},
+		{
+			name: "use errors.Wrap WithMessage()",
+			err:  errors.Wrap(WithMessage(errors.New("error"), "label", "message"), "wrapped"),
+			want: "label",
+		},
+		{
+			name: "use multiple label error(Wrap and New)",
+			err:  Wrap(New("message", "inner"), "outer"),
+			want: "outer",
+		},
+		{
+			name: "use multiple label error(WithMessage and New)",
+			err:  WithMessage(New("message", "inner"), "outer", "message"),
+			want: "outer",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Label(tt.err); got != tt.want {
+				t.Errorf("Label(): got: %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
