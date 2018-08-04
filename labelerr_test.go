@@ -81,3 +81,49 @@ func TestWrapNil(t *testing.T) {
 		t.Errorf("Wrap(nil, \"no error\"): got: %v, want nil", got)
 	}
 }
+
+func TestWithMessage(t *testing.T) {
+	tests := []struct {
+		name  string
+		err   error
+		label string
+		msg   string
+		want  string
+	}{
+		{
+			name:  "simple",
+			err:   errors.New("error"),
+			label: "label",
+			msg:   "message",
+			want:  "message: label: error",
+		},
+		{
+			name:  "empty label",
+			err:   errors.New("error"),
+			label: "",
+			msg:   "message",
+			want:  "message: : error",
+		},
+		{
+			name:  "empty message",
+			err:   errors.New("error"),
+			label: "label",
+			msg:   "",
+			want:  ": label: error",
+		},
+		{
+			name:  "empty label and message",
+			err:   errors.New("error"),
+			label: "",
+			msg:   "",
+			want:  ": : error",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := WithMessage(tt.err, tt.label, tt.msg); got.Error() != tt.want {
+				t.Errorf("WithMessage.Error(): got: %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

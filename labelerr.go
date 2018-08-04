@@ -17,16 +17,16 @@ func Wrap(err error, label string) error {
 	if err == nil {
 		return nil
 	}
-	return &labelError{
+	return errors.WithStack(&labelError{
 		err:   err,
 		label: label,
-	}
+	})
 }
 
 func WithMessage(err error, label, msg string) error {
 	return errors.Wrap(
 		&labelError{
-			err:   errors.Wrap(err, msg),
+			err:   err,
 			label: label,
 		},
 		msg,
