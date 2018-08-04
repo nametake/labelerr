@@ -199,3 +199,44 @@ func TestLabel(t *testing.T) {
 		})
 	}
 }
+
+func TestCause(t *testing.T) {
+	tests := []struct {
+		name string
+		err  error
+		want string
+	}{
+		{
+			name: "New()",
+			err:  New("message", "label"),
+			want: "message",
+		},
+		{
+			name: "Wrap()",
+			err:  Wrap(errors.New("error"), "label"),
+			want: "error",
+		},
+		{
+			name: "WithMessage()",
+			err:  WithMessage(errors.New("error"), "label", "message"),
+			want: "error",
+		},
+		{
+			name: "use errors.Wrap and Wrap()",
+			err:  errors.Wrap(Wrap(errors.New("error"), "label"), "outer"),
+			want: "error",
+		},
+		{
+			name: "use errors.Wrap and Wrap()",
+			err:  errors.Wrap(WithMessage(errors.New("error"), "label", "message"), "outer"),
+			want: "error",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := errors.Cause(tt.err); got.Error() != tt.want {
+				t.Errorf("Cause(): got: %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
