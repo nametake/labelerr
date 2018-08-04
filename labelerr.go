@@ -14,6 +14,9 @@ func New(msg, label string) error {
 }
 
 func Wrap(err error, label string) error {
+	if err == nil {
+		return nil
+	}
 	return &labelError{
 		err:   err,
 		label: label,
