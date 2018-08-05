@@ -60,9 +60,10 @@ type labeler interface {
 }
 
 var (
-	_ error   = (*labelError)(nil)
-	_ causer  = (*labelError)(nil)
-	_ labeler = (*labelError)(nil)
+	_ error         = (*labelError)(nil)
+	_ fmt.Formatter = (*labelError)(nil)
+	_ causer        = (*labelError)(nil)
+	_ labeler       = (*labelError)(nil)
 )
 
 type labelError struct {
@@ -80,4 +81,19 @@ func (l *labelError) Cause() error {
 
 func (l *labelError) Label() string {
 	return l.label
+}
+
+func (l *labelError) Format(s fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if s.Flag('+') {
+			fmt.Fprintf(s, "%+v", l.err)
+			return
+		}
+		fallthrough
+	case 's':
+		fmt.Fprintf(s, "%s", l.err)
+	case 'q':
+		fmt.Fprintf(s, "%q", l.err)
+	}
 }
