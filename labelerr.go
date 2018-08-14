@@ -1,3 +1,4 @@
+// Package labelerr provides to add label to error.
 package labelerr
 
 import (
@@ -6,6 +7,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// New returns an error with supplied message and label.
+// New also records the stack trace at the point it was called.
 func New(msg, label string) error {
 	return &labelError{
 		err:   errors.New(msg),
@@ -13,16 +16,20 @@ func New(msg, label string) error {
 	}
 }
 
+// Wrap returns an error annotating err with a stack trace at the point Wrap is called,
+// and the supplied label. If err is nil, Wrap returns nil.
 func Wrap(err error, label string) error {
 	if err == nil {
 		return nil
 	}
-	return &labelError{
+	return errors.WithStack(&labelError{
 		err:   err,
 		label: label,
-	}
+	})
 }
 
+// WithMessage returns an error annotating err with a stack trace at the point Wrap is called,
+// and the supplied label and message. If err is nil, Wrap returns nil.
 func WithMessage(err error, label, msg string) error {
 	if err == nil {
 		return nil
@@ -36,6 +43,7 @@ func WithMessage(err error, label, msg string) error {
 	)
 }
 
+// Label returns the last assigned label, if possible.
 func Label(err error) string {
 	for err != nil {
 		label, ok := err.(labeler)
