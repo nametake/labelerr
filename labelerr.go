@@ -43,7 +43,8 @@ func WithMessage(err error, label, msg string) error {
 	)
 }
 
-// Label returns the last assigned label, if possible.
+// Label returns the last assigned label.
+// Even if errors are wrapped using errors.Wrap.
 func Label(err error) string {
 	for err != nil {
 		label, ok := err.(labeler)
