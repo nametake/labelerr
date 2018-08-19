@@ -1,4 +1,11 @@
 // Package labelerr provides to add label to error.
+//
+// The labelerr.Wrap function returns new erorr that added label to the original error.
+// The label can be retrieved with labelerr.Label function.
+//
+// This is supported to be used with github.com/pkg/errors.
+// So, labeled errors implement the Cause method and also supported to errors.Cause.
+// And, it dosen't lose stacktrace that given by github.com/pkg/errors
 package labelerr
 
 import (
